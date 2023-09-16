@@ -1,4 +1,5 @@
 from langdetect import detect
+import os
 
 def is_vietnamese(word):
     try:
@@ -8,31 +9,48 @@ def is_vietnamese(word):
         return False
 
 
-def cleanWiki(filePath, j):
-    file = open(filePath, "r")
+def rmSpecialChar(line):
+    cleanStr = ""
+    lastItem = ""
+    symbols = [",", ".", ";"]
+    for item in line:
+        if (item.isalnum() or item.isspace()):
+            cleanStr += item
+        else:
+            if (item in symbols):
+                cleanStr += " " + item + " "
+
+    
+    return cleanStr
+
+
+def cleanText(folderPath, fileName, j):
+    symbols = [",", ".", ";"]
+    file = open(os.path.join(folderPath, fileName), "r")
 
     line = file.readline()
 
-    while (line and j > 0):
-        words = line.split()
-        print(words)
+    output = open(os.path.join("output", fileName), "w")
+    cleanStr = ""
 
-        while (words[0].isdigit()):
-            words.pop(0)
+    while (line and j > 0):
+        words = rmSpecialChar(line)
+        words = line.split()
 
         i = 0
         while (i < len(words)):
-            if (not words[i].isalpha()):
+            if (not words[i].isalpha() or not is_vietnamese(words[i]) or words[i] in symbols):
                 words.pop(i)
-            elif (not is_vietnamese(words[i])):
-                words.pop(i)
+                if (cleanStr):
+                    output.write(cleanStr + "\n")
+                    cleanStr = ""
             else:
+                cleanStr += words[i] + " "
                 i += 1
-
-        print(words)
 
         line = file.readline()
 
         j -= 1
 
+    output.close()
     file.close()
