@@ -19,7 +19,6 @@ def rmSpecialChar(line):
             if (item in symbols):
                 cleanStr += " " + item + " "
 
-    
     return cleanStr
 
 
@@ -34,7 +33,7 @@ def cleanText(folderPath, fileName, j):
 
     while (line and j > 0):
         words = rmSpecialChar(line)
-        words = line.split()
+        words = words.split()
 
         i = 0
         while (i < len(words)):

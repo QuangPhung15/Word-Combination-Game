@@ -44,6 +44,7 @@ def generate_next_word(model, dict, tokens, beam = False):
     potentials = []
     word = tokens[-1]
     probs_next = model[word]
+    print(probs_next)
     for next_word in probs_next:
         if next_word != '</s>' and next_word in dict:
             score1 = probs_next[next_word]
