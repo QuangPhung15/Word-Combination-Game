@@ -50,14 +50,14 @@ def generate_next_word(model, dict, tokens, beam: False):
             if beam == False:
                 potentials.append((score1, next_word))
             else:
-                potentials2 = []
+                scores = []
                 probs_next_next = model[next_word]
                 for next_next_word in probs_next_next:
                     score2 = probs_next_next[next_next_word]
                     score = score1 - math.log(score2)
-                    potentials2.append((score, [next_word]))
-                potentials2.sort()
-                potentials.append(potentials2[0])
+                    scores.append(score)
+                scores.sort()
+                potentials.append((scores[0], next_word))
     potentials.sort()
     return potentials[0]
 
