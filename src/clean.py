@@ -11,7 +11,6 @@ def is_vietnamese(word):
 
 def rmSpecialChar(line):
     cleanStr = ""
-    lastItem = ""
     symbols = [",", ".", ";"]
     for item in line:
         if (item.isalnum() or item.isspace()):
@@ -45,7 +44,7 @@ def cleanText(folderPath, fileName, j):
                     output.write(cleanStr + "\n")
                     cleanStr = ""
             else:
-                cleanStr += words[i] + " "
+                cleanStr += words[i].lower() + " "
                 i += 1
 
         line = file.readline()

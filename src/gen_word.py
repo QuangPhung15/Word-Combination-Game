@@ -40,7 +40,7 @@ def generate_dict(syllable_filename):
     return viet_dict
 
 
-def generate_next_word(model, dict, tokens, beam: False):
+def generate_next_word(model, dict, tokens, beam = False):
     potentials = []
     word = tokens[-1]
     probs_next = model[word]
