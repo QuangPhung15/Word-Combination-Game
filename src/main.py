@@ -2,7 +2,7 @@ from clean import *
 from gen_word import *
 import os 
 
-cleanText("vie_wikipedia_2016_10K", "vie_wikipedia_2016_10K-sentences.txt", 1000)
+cleanText("vie_wikipedia_2016_10K", "vie_wikipedia_2016_10K-sentences.txt", 10000)
 
 # sentences = read_data(os.path.join("output", "vie_wikipedia_2016_10K-sentences.txt"))
 # print(sentences)
