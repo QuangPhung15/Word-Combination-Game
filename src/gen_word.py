@@ -1,5 +1,5 @@
 import re
-
+import math
 from collections import defaultdict
 
 
@@ -40,14 +40,24 @@ def generate_dict(syllable_filename):
     return viet_dict
 
 
-def generate_next_word(model, dict, tokens):
+def generate_next_word(model, dict, tokens, beam: False):
     potentials = []
     word = tokens[-1]
     probs_next = model[word]
     for next_word in probs_next:
         if next_word != '</s>' and next_word in dict:
-            score = probs_next[next_word]
-            potentials.append((score, next_word))
+            score1 = probs_next[next_word]
+            if beam == False:
+                potentials.append((score1, next_word))
+            else:
+                potentials2 = []
+                probs_next_next = model[next_word]
+                for next_next_word in probs_next_next:
+                    score2 = probs_next_next[next_next_word]
+                    score = score1 - math.log(score2)
+                    potentials2.append((score, [next_word]))
+                potentials2.sort()
+                potentials.append(potentials2[0])
     potentials.sort()
     return potentials[0]
 
