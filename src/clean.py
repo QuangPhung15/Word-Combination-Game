@@ -1,17 +1,17 @@
 import os
 import json
 
-def makeVNWordDict():
-    f = open("vietnamese-syllables.txt", "r")
-    vnDict = dict()
+# def makeVNWordDict():
+#     f = open("vietnamese-syllables.txt", "r")
+#     vnDict = dict()
 
-    for word in f:
-        if word[0] not in vnDict:
-            vnDict[word[0]] = list()
-        vnDict[word[0]].append(word[1:len(word) - 1:1])
+#     for word in f:
+#         if word[0] not in vnDict:
+#             vnDict[word[0]] = list()
+#         vnDict[word[0]].append(word[1:len(word) - 1:1])
 
-    with open("VNWords.json", 'w') as json_file:
-        json.dump(vnDict, json_file)
+#     with open("VNWords.json", 'w') as json_file:
+#         json.dump(vnDict, json_file)
 
 def is_vietnamese(word):
     try:

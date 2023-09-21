@@ -18,4 +18,5 @@ import os
 # a = generate_next_word(model, dictionary, ["đòi", "tiền"])
 # print(a)
 
-makeVNWordDict()
+# makeVNWordDict()
+
