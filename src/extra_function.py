@@ -16,7 +16,8 @@ def gen_vn_dict():
                     wordProb[words[0].lower()] = {}
                 wordProb[words[0].lower()][words[1].lower()] = 0.0
         
-        json.dump(wordProb, f2, indent=4)
+        json.dump(wordProb, f2, indent=4, ensure_ascii=False)
+
 
 def separateCorpus(file):
     try:
@@ -36,3 +37,19 @@ def separateCorpus(file):
                 else:
                     break
             j += 1
+
+
+def createVNWordsJSON():
+    f1 = open("Dictionary/words.txt", "r")
+    f2 = open("Dictionary/vnWords.json", "w")
+
+    vnWords = dict()
+
+    for line in f1:
+        line = json.loads(line)
+        word = line["text"]
+        words = word.split(" ")
+        for item in words:
+            vnWords[item.lower()] = 1
+    
+    json.dump(vnWords, f2, indent=4, ensure_ascii=False)

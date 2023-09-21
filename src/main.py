@@ -2,9 +2,12 @@ from clean import *
 from gen_word import *
 import os 
 
-# cleanText("", "corpus.txt", 10)
 
-# sentences = read_data(os.path.join("vie_wikipedia_2016_10K", "vie_wikipedia_2016_10K-sentences.txt"))
+for i in range(94, 95):
+    path = f"corpus{i}.txt"
+    cleanText("corpus", path)
+
+
 # sentences = read_data(os.path.join("output", "corpus.txt"))
 # # print(sentences)
 
@@ -17,6 +20,4 @@ import os
 
 # a = generate_next_word(model, dictionary, ["đòi", "tiền"])
 # print(a)
-
-# makeVNWordDict()
 
