@@ -3,21 +3,23 @@ from gen_word import *
 import os 
 
 
-for i in range(94, 95):
-    path = f"corpus{i}.txt"
-    cleanText("corpus", path)
+# for i in range(95):
+#     path = f"corpus{i}.txt"
+#     cleanText("corpus", path)
+
+# cleanText("vie_wikipedia_2016_10K", "vie_wikipedia_2016_10K-sentences.txt")
 
 
-# sentences = read_data(os.path.join("output", "corpus.txt"))
-# # print(sentences)
+sentences = read_data(os.path.join("output", "corpus0.txt"))
+# print(sentences)
 
 
-# model = train_bigram_model(sentences)
-# # print(model)
+model = train_bigram_model(sentences)
+# print(model)
 
 # dictionary = generate_dict("vietnamese-syllables.txt")
-# # print(dictionary)
+# print(dictionary)
 
-# a = generate_next_word(model, dictionary, ["đòi", "tiền"])
-# print(a)
+a = generate_next_word(model, "đi")
+print(a)
 

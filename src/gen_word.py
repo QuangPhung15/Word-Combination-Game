@@ -33,20 +33,43 @@ def train_bigram_model(sentences):
     return bigram_model
 
 
-def generate_dict(syllable_filename):
-    viet_dict = []
-    for word in open(syllable_filename).read().splitlines():
-        viet_dict.append(word)
-    return viet_dict
+# def generate_dict(syllable_filename):
+#     viet_dict = []
+#     for word in open(syllable_filename).read().splitlines():
+#         viet_dict.append(word)
+#     return viet_dict
 
 
-def generate_next_word(model, dict, tokens, beam = False):
+# def generate_next_word(model, dict, tokens, beam = False):
+#     potentials = []
+#     word = tokens[-1]
+#     probs_next = model[word]
+#     print(probs_next)
+#     for next_word in probs_next:
+#         if next_word != '</s>' and next_word in dict:
+#             score1 = probs_next[next_word]
+#             if beam == False:
+#                 potentials.append((score1, next_word))
+#             else:
+#                 scores = []
+#                 probs_next_next = model[next_word]
+#                 for next_next_word in probs_next_next:
+#                     score2 = probs_next_next[next_next_word]
+#                     score = score1 - math.log(score2)
+#                     scores.append(score)
+#                 scores.sort()
+#                 potentials.append((scores[0], next_word))
+#     potentials.sort()
+#     return potentials[0]
+
+
+def generate_next_word(model, tokens, beam = False):
     potentials = []
-    word = tokens[-1]
+    word = tokens
     probs_next = model[word]
-    print(probs_next)
+    # print(probs_next)
     for next_word in probs_next:
-        if next_word != '</s>' and next_word in dict:
+        if next_word != '</s>':
             score1 = probs_next[next_word]
             if beam == False:
                 potentials.append((score1, next_word))
