@@ -41,7 +41,7 @@ def train_bigram_model():
             count = sum(bigram_count[w1].values())
             for w2 in bigram_count[w1]:
                 bigram_model[w1][w2] = bigram_count[w1][w2] / count 
-            sorted_items = sorted(bigram_model[w1].items(), key=lambda x: x[1])
+            sorted_items = sorted(bigram_model[w1].items(), key=lambda x: x[1], reverse=True)
             sorted_dict = dict(sorted_items)
             bigram_model[w1] = sorted_dict
 
@@ -50,7 +50,7 @@ def train_bigram_model():
         json.dump(bigram_model, f2, indent=4, ensure_ascii=False)
 
 
-def generate_next_word(tokens, beam = False):
+def generate_next_word(tokens):
     with open("Dictionary/wordsProb.json", "r") as f1:
         model = json.load(f1)
     probs_next = model[tokens]
@@ -60,19 +60,17 @@ def generate_next_word(tokens, beam = False):
 def generate_next_word_beam(tokens):
     with open("Dictionary/wordsProb.json", "r") as f1:
         model = json.load(f1)
+
     potentials = []
     probs_next = model[tokens]
     for next_word in probs_next:
         score1 = probs_next[next_word]
-        scores = []
         probs_next_next = model[next_word]
-        for next_next_word in probs_next_next:
-            score2 = probs_next_next[next_next_word]
-            score = score1 - math.log(score2)
-            scores.append(score)
-        scores.sort()
-        potentials.append((scores[0], next_word))
-    potentials.sort()
+        first_key, first_value = next(iter(probs_next_next.items()))
+        score2 = first_value
+        score = score1 - math.log(score2)
+        potentials.append((score, next_word))
+        
+    potentials = sorted(potentials, key=lambda x: x[0], reverse=True)
+    print(potentials)
     return potentials[0]
-
-
