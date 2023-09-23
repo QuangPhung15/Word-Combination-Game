@@ -2,8 +2,9 @@ import json
 import os
 
 def gen_vn_dict():
-    with open("Dictionary/words.txt", "r") as f1, open("Dictionary/words.json", "w") as f2:
+    with open("Dictionary/words.txt", "r") as f1, open("Dictionary/wordsProb.json", "w") as f2, open("Dictionary/wordsCount.json", "w") as f3:
         wordProb = {}
+        wordCount = {}
 
         for line in f1:
             line = json.loads(line)
@@ -14,9 +15,12 @@ def gen_vn_dict():
             if size == 2:
                 if words[0].lower() not in wordProb:
                     wordProb[words[0].lower()] = {}
+                    wordCount[words[0].lower()] = {}
                 wordProb[words[0].lower()][words[1].lower()] = 0.0
+                wordCount[words[0].lower()][words[1].lower()] = 1
         
         json.dump(wordProb, f2, indent=4, ensure_ascii=False)
+        json.dump(wordCount, f3, indent=4, ensure_ascii=False)
 
 
 def separateCorpus(file):
@@ -53,3 +57,5 @@ def createVNWordsJSON():
             vnWords[item.lower()] = 1
     
     json.dump(vnWords, f2, indent=4, ensure_ascii=False)
+
+# gen_vn_dict()

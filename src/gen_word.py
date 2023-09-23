@@ -1,7 +1,6 @@
 import re
+import json
 import math
-from collections import defaultdict
-
 
 def read_data(corpus_file, num_sents=1e+6):
     sents = []
@@ -18,70 +17,62 @@ def read_data(corpus_file, num_sents=1e+6):
     return sents
 
 
-def train_bigram_model(sentences):
-    bigram_model = defaultdict(lambda: defaultdict(int))
+def bigram_count(sentences):
+    with open("Dictionary/wordsCount.json", "r") as f1:
+        bigram_count = json.load(f1)
+
     for sentence in sentences:
         words = sentence.split()
         for i in range(len(words) - 1):
-            bigram_model[words[i]][words[i+1]] +=1
-    
-    for w1 in bigram_model:
-        count = sum(bigram_model[w1].values())
-        for w2 in bigram_model[w1]:
-            bigram_model[w1][w2] = bigram_model[w1][w2] / count
-    
-    return bigram_model
+          try:
+            bigram_count[words[i]][words[i+1]] +=1
+          except:
+            pass
+    with open("Dictionary/wordsCount.json", "w") as f2:
+        json.dump(bigram_count, f2, indent=4, ensure_ascii=False)
 
 
-# def generate_dict(syllable_filename):
-#     viet_dict = []
-#     for word in open(syllable_filename).read().splitlines():
-#         viet_dict.append(word)
-#     return viet_dict
+def train_bigram_model():
+    with open("Dictionary/wordsCount.json", "r") as f1:
+        bigram_model = json.load(f1)
+        bigram_count = bigram_model.copy()
+
+        for w1 in bigram_count:
+            count = sum(bigram_count[w1].values())
+            for w2 in bigram_count[w1]:
+                bigram_model[w1][w2] = bigram_count[w1][w2] / count 
+            sorted_items = sorted(bigram_model[w1].items(), key=lambda x: x[1])
+            sorted_dict = dict(sorted_items)
+            bigram_model[w1] = sorted_dict
 
 
-# def generate_next_word(model, dict, tokens, beam = False):
-#     potentials = []
-#     word = tokens[-1]
-#     probs_next = model[word]
-#     print(probs_next)
-#     for next_word in probs_next:
-#         if next_word != '</s>' and next_word in dict:
-#             score1 = probs_next[next_word]
-#             if beam == False:
-#                 potentials.append((score1, next_word))
-#             else:
-#                 scores = []
-#                 probs_next_next = model[next_word]
-#                 for next_next_word in probs_next_next:
-#                     score2 = probs_next_next[next_next_word]
-#                     score = score1 - math.log(score2)
-#                     scores.append(score)
-#                 scores.sort()
-#                 potentials.append((scores[0], next_word))
-#     potentials.sort()
-#     return potentials[0]
+    with open("Dictionary/wordsProb.json", "w") as f2:
+        json.dump(bigram_model, f2, indent=4, ensure_ascii=False)
 
 
-def generate_next_word(model, tokens, beam = False):
+def generate_next_word(tokens, beam = False):
+    with open("Dictionary/wordsProb.json", "r") as f1:
+        model = json.load(f1)
+    probs_next = model[tokens]
+    potentials = list(probs_next.keys())
+    return potentials[0]
+
+def generate_next_word_beam(tokens):
+    with open("Dictionary/wordsProb.json", "r") as f1:
+        model = json.load(f1)
     potentials = []
-    word = tokens
-    probs_next = model[word]
-    # print(probs_next)
+    probs_next = model[tokens]
     for next_word in probs_next:
-        if next_word != '</s>':
-            score1 = probs_next[next_word]
-            if beam == False:
-                potentials.append((score1, next_word))
-            else:
-                scores = []
-                probs_next_next = model[next_word]
-                for next_next_word in probs_next_next:
-                    score2 = probs_next_next[next_next_word]
-                    score = score1 - math.log(score2)
-                    scores.append(score)
-                scores.sort()
-                potentials.append((scores[0], next_word))
+        score1 = probs_next[next_word]
+        scores = []
+        probs_next_next = model[next_word]
+        for next_next_word in probs_next_next:
+            score2 = probs_next_next[next_next_word]
+            score = score1 - math.log(score2)
+            scores.append(score)
+        scores.sort()
+        potentials.append((scores[0], next_word))
     potentials.sort()
     return potentials[0]
+
 
