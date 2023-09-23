@@ -1,5 +1,19 @@
 import json
 import os
+import zipfile
+
+def zipFolder(folder):
+    folder_to_zip = folder
+
+    output_zip_file = f"{folder}.zip"
+
+    with zipfile.ZipFile(output_zip_file, 'w', zipfile.ZIP_DEFLATED) as zipf:
+        for root, _, files in os.walk(folder_to_zip):
+            for file in files:
+                file_path = os.path.join(root, file)
+                arcname = os.path.relpath(file_path, folder_to_zip)
+                zipf.write(file_path, arcname=arcname)
+
 
 def gen_vn_dict():
     with open("Dictionary/words.txt", "r") as f1, open("Dictionary/wordsProb.json", "w") as f2, open("Dictionary/wordsCount.json", "w") as f3:
@@ -25,7 +39,7 @@ def gen_vn_dict():
 
 def separateCorpus(file):
     try:
-        os.mkdir(file)
+        os.mkdir(f"raw/{file}")
     except:
         pass
 
@@ -33,7 +47,7 @@ def separateCorpus(file):
         line = f1.readline()
         j = 0
         while (line):
-            f2 = open(f"{file}/{file}{j}.txt", "w")
+            f2 = open(f"raw/{file}/{file}{j}.txt", "w")
             for i in range(100000):
                 f2.write(line)
                 if (line):
@@ -41,7 +55,6 @@ def separateCorpus(file):
                 else:
                     break
             j += 1
-
 
 def createVNWordsJSON():
     f1 = open("Dictionary/words.txt", "r")
@@ -58,4 +71,8 @@ def createVNWordsJSON():
     
     json.dump(vnWords, f2, indent=4, ensure_ascii=False)
 
+    f1.close()
+    f2.close()
+
 # gen_vn_dict()
+# zipFolder("output")
