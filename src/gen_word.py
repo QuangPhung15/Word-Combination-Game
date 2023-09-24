@@ -53,24 +53,30 @@ def train_bigram_model():
 def generate_next_word(tokens):
     with open("Dictionary/wordsProb.json", "r") as f1:
         model = json.load(f1)
-    probs_next = model[tokens]
+    
+    words = tokens.split()
+    probs_next = model[words[1]]
     potentials = list(probs_next.keys())
-    return potentials[0]
+
+    return words[1] + " " + potentials[0]
 
 def generate_next_word_beam(tokens):
     with open("Dictionary/wordsProb.json", "r") as f1:
         model = json.load(f1)
 
+    words = tokens.split()
     potentials = []
-    probs_next = model[tokens]
+    probs_next = model[words[1]]
     for next_word in probs_next:
-        score1 = probs_next[next_word]
-        probs_next_next = model[next_word]
-        first_key, first_value = next(iter(probs_next_next.items()))
-        score2 = first_value
-        score = score1 - math.log(score2)
-        potentials.append((score, next_word))
+        try:
+            score1 = probs_next[next_word]
+            probs_next_next = model[next_word]
+            first_key, first_value = next(iter(probs_next_next.items()))
+            score2 = first_value
+            score = score1 - math.log(score2)
+            potentials.append((score, next_word))
+        except:
+            pass
         
     potentials = sorted(potentials, key=lambda x: x[0], reverse=True)
-    print(potentials)
-    return potentials[0]
+    return words[1] + " " + potentials[0][1]

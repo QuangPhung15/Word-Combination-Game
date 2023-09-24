@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<body>
+    <form onsubmit="return repeatvalue()">
+        <input type="text" id="Response" />
+    </form>
+    <hr />
+    <label id="outputLabel"></label> <!-- Add a label to display the API response -->
+    <script>
+        function repeatvalue() {
+            var txtName = document.getElementById("Response");
+
+            var myHeaders = new Headers();
+            myHeaders.append("Content-Type", "application/json");
+
+            var raw = JSON.stringify({
+                "input": txtName.value
+            });
+
+            var requestOptions = {
+                method: 'POST',
+                headers: myHeaders,
+                body: raw,
+                redirect: 'follow'
+            };
+
+            fetch("http://127.0.0.1:5000/process", requestOptions)
+                .then(response => response.json())
+                .then(result => {
+                    // Update the content of the output label with the API response
+                    var outputLabel = document.getElementById("outputLabel");
+                    outputLabel.textContent = "Đối hộ: " + result["output"];
+                })
+                .catch(error => console.log('error', error));
+
+            txtName.value = '';
+
+            return false;
+        }
+    </script>
+</body>
+</html>
