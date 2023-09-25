@@ -1,2 +1,2 @@
-# Word-Combination-Game
-A Vietnamese words combination game
+# Word-Connection-Game
+A Vietnamese words connection game
