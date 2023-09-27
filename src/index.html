@@ -6,7 +6,7 @@
     <body>
         <title>Connect Từ</title>
         <div class="container">
-            <div class="Top">
+            <div class="top">
                 <div class="productName">
                     <label>Connect Từ</label>
                     <!-- Copyright by Squiggly Text https://codepen.io/lbebber/pen/KwGEQv -->
@@ -49,16 +49,21 @@
                     <input type="text" id="Response" class="large-input"/>
                 </form>
             </div>
+            <div class="suggest">
+                <label id="compAns"></label>
+            </div>
         </div>
         
         <script>
             function repeatvalue() {
                 var txtName = document.getElementById("Response");
                 var countLabel = document.getElementById("count");
+                var comAns = document.getElementById("compAns");
 
                 if (txtName.value === "incorrect") {
                     txtName.classList.add("error"); // Apply the 'error' class to trigger animation
                     txtName.value = '';
+                    comAns.textContent = "Chơi gì kì zậy";
                     setTimeout(function() {
                         txtName.classList.remove("error");
                     }, 500);
@@ -67,11 +72,14 @@
                     count--; // Decrement the count
                     countLabel.textContent = count; 
 
-                    // if (count == 0) {
-
-                    // }
+                    if (count == 0) {
+                        window.location.href = 'lose.html';
+                        return false;
+                    }
                     return false;
                 }
+
+                comAns.textContent = "";
 
                 var myHeaders = new Headers();
                 myHeaders.append("Content-Type", "application/json");
@@ -97,7 +105,7 @@
 
                 txtName.value = '';
 
-                return true;
+                return false;
             }
         </script>
     </body>

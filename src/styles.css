@@ -14,7 +14,7 @@ html, body {
     flex-direction: column;
 }
 
-.Top {
+.top {
     display: flex;
     justify-content: space-between;
 }
@@ -48,6 +48,14 @@ html, body {
     justify-content: center;
     align-self: center;
     margin: 10px;
+}
+
+.suggest {
+    display: flex;
+    color: #D21F3C;
+    font-size: 80px;
+    align-self: center;
+    margin-top: 100px;
 }
 
 input[type="text"].error {

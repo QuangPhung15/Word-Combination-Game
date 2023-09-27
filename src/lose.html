@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" type="text/css" href="lose.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connect Từ</title>
+</head>
+<body>
+    <div class="container">
+        <div class="lose">
+            <label>Thua Rồi!!!!</label>
+        </div>
+        <div class="replay">
+            <label id="playAgain" style="cursor: pointer;">Chơi Lại</label>
+        </div>
+    </div>
+</body>
+<script>
+    const label = document.getElementById("playAgain");
+
+    label.addEventListener("click", function() {
+        window.location.href = 'index.html';
+    });
+</script>
+</html>
