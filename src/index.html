@@ -1,42 +1,104 @@
 <!DOCTYPE html>
 <html>
-<body>
-    <form onsubmit="return repeatvalue()">
-        <input type="text" id="Response" />
-    </form>
-    <hr />
-    <label id="outputLabel"></label> <!-- Add a label to display the API response -->
-    <script>
-        function repeatvalue() {
-            var txtName = document.getElementById("Response");
+    <head>
+        <link rel="stylesheet" type="text/css" href="styles.css">
+    </head>
+    <body>
+        <title>Connect Từ</title>
+        <div class="container">
+            <div class="Top">
+                <div class="productName">
+                    <label>Connect Từ</label>
+                    <!-- Copyright by Squiggly Text https://codepen.io/lbebber/pen/KwGEQv -->
+                    <svg xmlns="http://www.w3.org/2000/svg" version="1.1">
+                        <defs>
+                            <filter id="squiggly-0">
+                                <feTurbulence id="turbulence" baseFrequency="0.02" numOctaves="3" result="noise" seed="0"/>
+                                <feDisplacementMap id="displacement" in="SourceGraphic" in2="noise" scale="6" />
+                            </filter>
+                            <filter id="squiggly-1">
+                                <feTurbulence id="turbulence" baseFrequency="0.02" numOctaves="3" result="noise" seed="1"/>
+                        <feDisplacementMap in="SourceGraphic" in2="noise" scale="8" />
+                            </filter>
+                            
+                            <filter id="squiggly-2">
+                                <feTurbulence id="turbulence" baseFrequency="0.02" numOctaves="3" result="noise" seed="2"/>
+                        <feDisplacementMap in="SourceGraphic" in2="noise" scale="6" />
+                            </filter>
+                            <filter id="squiggly-3">
+                                <feTurbulence id="turbulence" baseFrequency="0.02" numOctaves="3" result="noise" seed="3"/>
+                        <feDisplacementMap in="SourceGraphic" in2="noise" scale="8" />
+                            </filter>
+                            
+                            <filter id="squiggly-4">
+                                <feTurbulence id="turbulence" baseFrequency="0.02" numOctaves="3" result="noise" seed="4"/>
+                        <feDisplacementMap in="SourceGraphic" in2="noise" scale="6" />
+                            </filter>
+                            </defs> 
+                    </svg>
+                </div>
+                <div class="count">
+                    <label id="count">3</label>
+                </div>
+            </div>
+            <div class="answer">
+                <label id="outputLabel">Mời bạn đi trước</label>
+            </div>
+            <div class="center-screen">
+                <form onsubmit="return repeatvalue()">
+                    <input type="text" id="Response" class="large-input"/>
+                </form>
+            </div>
+        </div>
+        
+        <script>
+            function repeatvalue() {
+                var txtName = document.getElementById("Response");
+                var countLabel = document.getElementById("count");
 
-            var myHeaders = new Headers();
-            myHeaders.append("Content-Type", "application/json");
+                if (txtName.value === "incorrect") {
+                    txtName.classList.add("error"); // Apply the 'error' class to trigger animation
+                    txtName.value = '';
+                    setTimeout(function() {
+                        txtName.classList.remove("error");
+                    }, 500);
 
-            var raw = JSON.stringify({
-                "input": txtName.value
-            });
+                    var count = parseInt(countLabel.textContent); // Get the current count value as an integer
+                    count--; // Decrement the count
+                    countLabel.textContent = count; 
 
-            var requestOptions = {
-                method: 'POST',
-                headers: myHeaders,
-                body: raw,
-                redirect: 'follow'
-            };
+                    // if (count == 0) {
 
-            fetch("http://127.0.0.1:5000/process", requestOptions)
-                .then(response => response.json())
-                .then(result => {
-                    // Update the content of the output label with the API response
-                    var outputLabel = document.getElementById("outputLabel");
-                    outputLabel.textContent = "Đối hộ: " + result["output"];
-                })
-                .catch(error => console.log('error', error));
+                    // }
+                    return false;
+                }
 
-            txtName.value = '';
+                var myHeaders = new Headers();
+                myHeaders.append("Content-Type", "application/json");
 
-            return false;
-        }
-    </script>
-</body>
+                var raw = JSON.stringify({
+                    "input": txtName.value
+                });
+
+                var requestOptions = {
+                    method: 'POST',
+                    headers: myHeaders,
+                    body: raw,
+                    redirect: 'follow'
+                };
+
+                fetch("http://127.0.0.1:5000/process", requestOptions)
+                    .then(response => response.json())
+                    .then(result => {
+                        var outputLabel = document.getElementById("outputLabel");
+                        outputLabel.textContent = result["output"];
+                    })
+                    .catch(error => console.log('error', error));
+
+                txtName.value = '';
+
+                return true;
+            }
+        </script>
+    </body>
 </html>

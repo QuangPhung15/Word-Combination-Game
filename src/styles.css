@@ -1,0 +1,101 @@
+@import url('https://fonts.googleapis.com/css?family=Amatic+SC:400,700');
+
+html, body {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    background-color: #AEF359;
+    font-family: "Amatic SC", sans-serif;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+}
+
+.Top {
+    display: flex;
+    justify-content: space-between;
+}
+  
+.productName {
+    display: flex;
+    color: white;
+    font-size: 100px;
+    margin-top: 2px;
+    margin-left: 10px;
+}
+
+.count {
+    display: flex;
+    color: brown;
+    font-size: 100px;
+    margin-top: 2px;
+    margin-right: 30px;
+}
+
+.answer {
+    display: flex;
+    color: black;
+    font-size: 80px;
+    align-self: center;
+    margin-top: 100px;
+}
+
+.center-screen {
+    display: flex;
+    justify-content: center;
+    align-self: center;
+    margin: 10px;
+}
+
+input[type="text"].error {
+    animation: shake 0.5s ease-in-out; /* Apply the 'shake' animation */
+}
+
+@keyframes shake {
+    0%, 100% {
+        transform: translateX(0); /* Start and end with no translation */
+    }
+    10%, 30%, 50%, 70%, 90% {
+        transform: translateX(-10px); /* Move to the left */
+    }
+    20%, 40%, 60%, 80% {
+        transform: translateX(10px); /* Move to the right */
+    }
+}
+
+
+.large-input {
+    display: flex;
+    width: 400px;
+    height: 60px;
+    font-size: 50px;
+    font-family: "Amatic SC", sans-serif;
+}
+
+/* Copyright by Squiggly Text https://codepen.io/lbebber/pen/KwGEQv */
+@keyframes squiggly-anim {
+    0% {
+      filter: url('#squiggly-0');
+    }
+    25% {
+      filter: url('#squiggly-1');
+    }
+    50% {
+      filter: url('#squiggly-2');
+    }
+    75% {
+      filter: url('#squiggly-3');
+    }
+    100% {
+      filter: url('#squiggly-4');
+    }
+  }
+  
+  .productName {
+    color: white;
+    animation: squiggly-anim 0.34s linear infinite;
+  }
+  

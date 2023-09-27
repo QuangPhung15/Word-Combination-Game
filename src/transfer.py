@@ -12,7 +12,6 @@ def process_input():
 
     # Process the input (e.g., perform some computation)
     result = gw.generate_next_word(input_value)
-    # result = input_value.lower()
 
     # Send the result back to JavaScript
     response = {'output': result}
