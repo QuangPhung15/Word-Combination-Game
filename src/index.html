@@ -60,27 +60,6 @@
                 var countLabel = document.getElementById("count");
                 var comAns = document.getElementById("compAns");
 
-                if (txtName.value === "incorrect") {
-                    txtName.classList.add("error"); // Apply the 'error' class to trigger animation
-                    txtName.value = '';
-                    comAns.textContent = "Chơi gì kì zậy";
-                    setTimeout(function() {
-                        txtName.classList.remove("error");
-                    }, 500);
-
-                    var count = parseInt(countLabel.textContent); // Get the current count value as an integer
-                    count--; // Decrement the count
-                    countLabel.textContent = count; 
-
-                    if (count == 0) {
-                        window.location.href = 'lose.html';
-                        return false;
-                    }
-                    return false;
-                }
-
-                comAns.textContent = "";
-
                 var myHeaders = new Headers();
                 myHeaders.append("Content-Type", "application/json");
 
@@ -98,8 +77,39 @@
                 fetch("http://127.0.0.1:5002/process", requestOptions)
                     .then(response => response.json())
                     .then(result => {
-                        var outputLabel = document.getElementById("outputLabel");
-                        outputLabel.textContent = result["output"];
+                        var output = result["output"];
+                        var check = result["check"];
+                        var lose = result["lose"];
+
+                        if (!lose) {
+                            if (!check) {
+                                txtName.classList.add("error"); // Apply the 'error' class to trigger animation
+                                txtName.value = '';
+                                comAns.textContent = "Chơi gì kì zậy";
+                                setTimeout(function() {
+                                    txtName.classList.remove("error");
+                                }, 500);
+
+                                var count = parseInt(countLabel.textContent); // Get the current count value as an integer
+                                count--;
+                                countLabel.textContent = count; 
+
+                                if (count == 0) {
+                                    window.location.href = 'lose.html';
+                                    return false;
+                                }
+                                return false;
+                            } else {
+                                var outputLabel = document.getElementById("outputLabel");
+                                outputLabel.textContent = output;
+                                omAns.textContent = "";
+                                return false;
+                            }
+                        } else {
+                            window.location.href = 'lose.html';
+                            return false;
+                        }
+
                     })
                     .catch(error => console.log('error', error));
 

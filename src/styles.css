@@ -55,7 +55,7 @@ html, body {
     color: #D21F3C;
     font-size: 80px;
     align-self: center;
-    margin-top: 100px;
+    margin: 20px;
 }
 
 input[type="text"].error {
