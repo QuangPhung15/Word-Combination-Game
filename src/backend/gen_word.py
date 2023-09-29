@@ -55,10 +55,20 @@ def generate_next_word(tokens):
         model = json.load(f1)
     
     words = tokens.split()
-    probs_next = model[words[1]]
-    potentials = list(probs_next.keys())
+    try:
+        probs_next = model[words[1]]
+        potentials = list(probs_next.keys())
 
-    return words[1] + " " + potentials[0]
+        i = 0
+        while (i < len(potentials) and not check_used_word(words[1] + " " + potentials[i])):
+            i += 1
+        
+        if (i < len(potentials)):
+            return words[1] + " " + potentials[i]
+        else:
+            return ""
+    except:
+        return ""
 
 def generate_next_word_beam(tokens):
     with open("Dictionary/wordsProb.json", "r") as f1:
@@ -80,3 +90,34 @@ def generate_next_word_beam(tokens):
         
     potentials = sorted(potentials, key=lambda x: x[0], reverse=True)
     return words[1] + " " + potentials[0][1]
+
+def check_used_word(input):
+    with open("Dictionary/usedWords.json", "r") as file:
+        usedWords = json.load(file)
+    if input in usedWords:
+        return False
+    else:
+        usedWords[input] = 1
+        with open("Dictionary/usedWords.json", "w") as file1:
+            json.dump(usedWords, file1, indent=4, ensure_ascii=False)
+        return True
+
+def check_valid_word(first, last):
+    with open("Dictionary/wordsCount.json", "r") as file:
+        vnWords = json.load(file)
+    if last in vnWords[first]:
+        return True
+    else:
+        return False
+
+def checkLose(word):
+    if (word):
+        return False
+    else:
+        return True
+
+
+
+    
+
+    

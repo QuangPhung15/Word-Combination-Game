@@ -1,7 +1,7 @@
-from clean import *
-from gen_word import *
+from backend.clean import *
+from backend.gen_word import *
 import os 
-import extra_function as ef
+import backend.extra_function as ef
 
 # ef.separateCorpus("vie_wikipedia_2021_1M-sentences")
 
