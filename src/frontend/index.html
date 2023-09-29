@@ -50,7 +50,7 @@
                 </form>
             </div>
             <div class="suggest">
-                <label id="compAns"></label>
+                <label id="compJoke"></label>
             </div>
         </div>
         
@@ -58,7 +58,25 @@
             function repeatvalue() {
                 var txtName = document.getElementById("Response");
                 var countLabel = document.getElementById("count");
-                var comAns = document.getElementById("compAns");
+                var compJoke = document.getElementById("compJoke");
+                var outputLabel = document.getElementById("outputLabel");
+                var count = parseInt(countLabel.textContent); // Get the current count value as an integer
+
+                var usrWords = txtName.value.split();
+                var compWords = outputLabel.value.split();
+
+                if (compWords.length == 2) {
+                    if (usrWords[0] != compWords[1]) {
+                        count--;
+                        countLabel.textContent = count; 
+                        comAns.textContent = "Chơi gì kì zậy!";
+                        if (count == 0) {
+                            window.location.href = 'lose.html';
+                            return false;
+                        }
+                        return false;
+                    } 
+                }
 
                 var myHeaders = new Headers();
                 myHeaders.append("Content-Type", "application/json");
@@ -85,12 +103,11 @@
                             if (!check) {
                                 txtName.classList.add("error"); // Apply the 'error' class to trigger animation
                                 txtName.value = '';
-                                comAns.textContent = "Chơi gì kì zậy";
+                                comAns.textContent = "Từ này dùng rồi mà!";
                                 setTimeout(function() {
                                     txtName.classList.remove("error");
                                 }, 500);
 
-                                var count = parseInt(countLabel.textContent); // Get the current count value as an integer
                                 count--;
                                 countLabel.textContent = count; 
 
@@ -100,9 +117,8 @@
                                 }
                                 return false;
                             } else {
-                                var outputLabel = document.getElementById("outputLabel");
                                 outputLabel.textContent = output;
-                                omAns.textContent = "";
+                                compJoke.textContent = "";
                                 return false;
                             }
                         } else {
