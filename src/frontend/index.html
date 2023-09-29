@@ -56,83 +56,101 @@
         
         <script>
             function repeatvalue() {
-                var txtName = document.getElementById("Response");
+                var usrInput = document.getElementById("Response");
                 var countLabel = document.getElementById("count");
                 var compJoke = document.getElementById("compJoke");
                 var outputLabel = document.getElementById("outputLabel");
-                var count = parseInt(countLabel.textContent); // Get the current count value as an integer
+                var count = parseInt(countLabel.textContent);
 
-                var usrWords = txtName.value.split();
-                var compWords = outputLabel.value.split();
+                // Clear any previous error styling
+                usrInput.classList.remove("error");
 
-                if (compWords.length == 2) {
-                    if (usrWords[0] != compWords[1]) {
-                        count--;
-                        countLabel.textContent = count; 
-                        comAns.textContent = "Chơi gì kì zậy!";
-                        if (count == 0) {
-                            window.location.href = 'lose.html';
-                            return false;
-                        }
-                        return false;
-                    } 
+                var usrWord = usrInput.value.trim(); // Remove leading/trailing whitespace
+
+                // Check if user input is empty
+                if (!usrWord) {
+                    compJoke.textContent = "Điền từ vào!!!";
+                    usrInput.classList.add("error");
+                    setTimeout(function () {
+                        usrInput.classList.remove("error");
+                    }, 500);
+                    count--;
+                    countLabel.textContent = count;
+                    if (count === 0) {
+                        window.location.href = 'lose.html';
+                    }
+                    return false;
                 }
 
-                var myHeaders = new Headers();
-                myHeaders.append("Content-Type", "application/json");
+                var compOut = outputLabel.textContent.split(" ");
+                var usrOut = usrWord.split(" ");
+                // Check if user input matches the expected word
+                if (compOut.length === 2 && usrOut[0] !== compOut[1]) {
+                    compJoke.textContent = "Chơi gì kì zậy!";
+                    usrInput.classList.add("error");
+                    usrInput.value = '';
+                    setTimeout(function () {
+                        usrInput.classList.remove("error");
+                    }, 500);
+                    count--;
+                    countLabel.textContent = count;
+                    if (count === 0) {
+                        window.location.href = 'lose.html';
+                        return false;
+                    }
+                } else {
+                    // Make an asynchronous request to check the word
+                    var requestOptions = {
+                        method: 'POST',
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({
+                            "input": usrWord
+                        }),
+                        redirect: 'follow'
+                    };
 
-                var raw = JSON.stringify({
-                    "input": txtName.value
-                });
+                    fetch("http://127.0.0.1:5002/process", requestOptions)
+                        .then(response => response.json())
+                        .then(result => {
+                            var output = result["output"];
+                            var check = result["check"];
+                            var lose = result["lose"];
 
-                var requestOptions = {
-                    method: 'POST',
-                    headers: myHeaders,
-                    body: raw,
-                    redirect: 'follow'
-                };
+                            if (!lose) {
+                                if (!check) {
+                                    compJoke.textContent = "Từ này dùng rồi mà!";
+                                    usrInput.classList.add("error");
+                                    usrInput.value = '';
+                                    setTimeout(function () {
+                                        usrInput.classList.remove("error");
+                                    }, 500);
+                                    count--;
+                                    countLabel.textContent = count;
 
-                fetch("http://127.0.0.1:5002/process", requestOptions)
-                    .then(response => response.json())
-                    .then(result => {
-                        var output = result["output"];
-                        var check = result["check"];
-                        var lose = result["lose"];
-
-                        if (!lose) {
-                            if (!check) {
-                                txtName.classList.add("error"); // Apply the 'error' class to trigger animation
-                                txtName.value = '';
-                                comAns.textContent = "Từ này dùng rồi mà!";
-                                setTimeout(function() {
-                                    txtName.classList.remove("error");
-                                }, 500);
-
-                                count--;
-                                countLabel.textContent = count; 
-
-                                if (count == 0) {
-                                    window.location.href = 'lose.html';
-                                    return false;
+                                    if (count === 0) {
+                                        window.location.href = 'lose.html';
+                                    }
+                                } else {
+                                    outputLabel.textContent = output;
+                                    compJoke.textContent = "";
                                 }
-                                return false;
                             } else {
-                                outputLabel.textContent = output;
-                                compJoke.textContent = "";
-                                return false;
+                                window.location.href = 'win.html';
                             }
-                        } else {
-                            window.location.href = 'lose.html';
-                            return false;
-                        }
+                        })
+                        .catch(error => {
+                            console.log('error', error);
+                            compJoke.textContent = "An error occurred. Please try again.";
+                        });
+                }
 
-                    })
-                    .catch(error => console.log('error', error));
-
-                txtName.value = '';
+                usrInput.value = '';
 
                 return false;
             }
+
         </script>
     </body>
 </html>

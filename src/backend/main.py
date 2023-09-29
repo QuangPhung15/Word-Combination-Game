@@ -1,7 +1,7 @@
-from backend.clean import *
-from backend.gen_word import *
+from clean import *
+from gen_word import *
 import os 
-import backend.extra_function as ef
+import extra_function as ef
 
 # ef.separateCorpus("vie_wikipedia_2021_1M-sentences")
 
@@ -15,5 +15,7 @@ import backend.extra_function as ef
 #     bigram_count(sentences)
 #     train_bigram_model()
 
-a = generate_next_word_beam('học hành')
-print(a)
+# a = generate_next_word_beam('học hành')
+# print(a)
+
+print(check_used_word("sinh đi"))

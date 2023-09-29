@@ -102,9 +102,10 @@ def check_used_word(input):
             json.dump(usedWords, file1, indent=4, ensure_ascii=False)
         return True
 
-def check_valid_word(first, last):
+def check_valid_word(input):
     with open("Dictionary/wordsCount.json", "r") as file:
         vnWords = json.load(file)
+    first, last = input.split()[0], input.split()[1]
     if last in vnWords[first]:
         return True
     else:
@@ -116,8 +117,7 @@ def checkLose(word):
     else:
         return True
 
-
-
-    
-
-    
+def eraseUsedWords():
+    with open("Dictionary/usedWords.json", "w") as f:
+        newDict = dict()
+        json.dump(newDict, f, indent=4, ensure_ascii=False)
