@@ -10,6 +10,8 @@ def process_input():
     data = request.json  # Receive JSON data from JavaScript
     input_value = data.get('input')
 
+    response = {}
+
     valid = gw.check_valid_word(input_value)
     if (valid):
         not_used = gw.check_used_word(input_value)
@@ -25,11 +27,11 @@ def process_input():
                             'check': True,
                             'lose': lose}
         else:
-            response = {'output': result,
+            response = {'output': input_value,
                         'check': False,
                         'lose': False}
     else:
-        response = {'output': result,
+        response = {'output': input_value,
                     'check': False,
                     'lose': False}
 
