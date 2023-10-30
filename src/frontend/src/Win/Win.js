@@ -1,6 +1,6 @@
 import styles from './Win.module.css';
-import Game from '../Game/Game.js';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 function State() {
     return (
@@ -26,19 +26,19 @@ function Effect() {
     return (
         // Copyright by Squiggly Text https://codepen.io/lbebber/pen/KwGEQv
         <div className={styles.confetti}>
-            <div className={styles.confetti-piece}></div>
-            <div className={styles.confetti-piece}></div>
-            <div className={styles.confetti-piece}></div>
-            <div className={styles.confetti-piece}></div>
-            <div className={styles.confetti-piece}></div>
-            <div className={styles.confetti-piece}></div>
-            <div className={styles.confetti-piece}></div>
-            <div className={styles.confetti-piece}></div>
-            <div className={styles.confetti-piece}></div>
-            <div className={styles.confetti-piece}></div>
-            <div className={styles.confetti-piece}></div>
-            <div className={styles.confetti-piece}></div>
-            <div className={styles.confetti-piece}></div>
+            <div className={styles.confettiPiece}></div>
+            <div className={styles.confettiPiece}></div>
+            <div className={styles.confettiPiece}></div>
+            <div className={styles.confettiPiece}></div>
+            <div className={styles.confettiPiece}></div>
+            <div className={styles.confettiPiece}></div>
+            <div className={styles.confettiPiece}></div>
+            <div className={styles.confettiPiece}></div>
+            <div className={styles.confettiPiece}></div>
+            <div className={styles.confettiPiece}></div>
+            <div className={styles.confettiPiece}></div>
+            <div className={styles.confettiPiece}></div>
+            <div className={styles.confettiPiece}></div>
         </div>
     )
 }
@@ -55,9 +55,9 @@ function Body() {
 }
 
 function Click() {
-    const [click, setClick] = useState(false);
+    const navigate = useNavigate();
 
-    function handelClick() {
+    const handelClick = useCallback(() => {
         var raw = "";
 
         var requestOptions = {
@@ -68,14 +68,13 @@ function Click() {
 
         fetch("http://127.0.0.1:5002/start", requestOptions)
             .then(response => response.text())
-            .then(result => setClick(true))
+            .then(result => console.log(result))
             .catch(error => console.log('error', error));
-        
-        setClick(true)
+
+        navigate('/game');
 
         return false;
-        
-    }
+    }, [navigate]);
 
     useEffect(() => {
         const label = document.getElementById("playAgain");
@@ -85,11 +84,7 @@ function Click() {
         return () => {
             label.removeEventListener("click", handelClick);
         };
-    }, []);
-
-    if (click) {
-        return <Game />;
-    }
+    }, [handelClick]);
 
     return <Body />;
 }

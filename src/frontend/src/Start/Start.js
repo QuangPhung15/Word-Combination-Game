@@ -1,13 +1,13 @@
-import Game from '../Game/Game.js';
 import styles from './Start.module.css';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 function Body() {
     const labelStyle = {
         cursor: 'pointer'
     };
 
-    return ( 
+    return (
         <div className={styles.start}>
             <label id="initial" style={labelStyle}>Zô</label>
         </div>
@@ -15,9 +15,9 @@ function Body() {
 }
 
 function Click() {
-    const [click, setClick] = useState(false);
+    const navigate = useNavigate();
 
-    function handelClick() {
+    const handelClick = useCallback(() => {
         var raw = "";
 
         var requestOptions = {
@@ -28,14 +28,13 @@ function Click() {
 
         fetch("http://127.0.0.1:5002/start", requestOptions)
             .then(response => response.text())
-            .then(result => setClick(true))
+            .then(result => console.log(result))
             .catch(error => console.log('error', error));
 
-        setClick(true)
+        navigate('/game');
 
         return false;
-        
-    }
+    }, [navigate]);
 
     useEffect(() => {
         const label = document.getElementById("initial");
@@ -45,11 +44,7 @@ function Click() {
         return () => {
             label.removeEventListener("click", handelClick);
         };
-    }, []);
-
-    if (click) {
-        return <Game />;
-    }
+    }, [handelClick]);
 
     return <Body />;
 }

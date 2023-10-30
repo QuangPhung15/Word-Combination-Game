@@ -1,6 +1,6 @@
-import Lose from '../Lose/Lose.js';
 import styles from './Game.module.css';
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 function ProductName() {
     return (
@@ -54,10 +54,10 @@ function Top({ count }) {
     );
 }
 
-function ComAns() {
+function ComAns({ outputLabel }) {
     return (
         <div className={styles.answer}>
-            <label id="outputLabel">Mời bạn đi trước</label>
+            <label id="outputLabel">{outputLabel}</label>
         </div>
     );
  }
@@ -75,21 +75,20 @@ function UsrAns() {
     const [usrInput, setUsrInput] = useState('');
     const [compJoke, setCompJoke] = useState('');
     const [outputLabel, setOutputLabel] = useState('Mời bạn đi trước');
-  
-    const handleRepeatvalue = () => {
-        // Clear any previous error styling
+    const navigate = useNavigate();
+
+    const handleRepeatvalue = useCallback((event) => {
+        event.preventDefault();
+
         setCompJoke('');
-        setUsrInput(usrInput.trim()); // Remove leading/trailing whitespace
+        setUsrInput(usrInput.trim());
     
         // Check if user input is empty
         if (!usrInput) {
             setCompJoke('Điền từ vào!!!');
             setUsrInput('');
             setCount(count - 1);
-    
-            if (count === 1) {
-                return <Lose />;
-            }
+
             return false;
         }
     
@@ -101,10 +100,6 @@ function UsrAns() {
             setCompJoke('Chơi gì kì zậy!');
             setUsrInput('');
             setCount(count - 1);
-    
-            if (count === 1) {
-                return <Lose />;
-            }
 
             return false;
         } else {
@@ -115,7 +110,7 @@ function UsrAns() {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                input: usrInput,
+                    'input': usrInput,
                 }),
                 redirect: 'follow',
             };
@@ -132,15 +127,11 @@ function UsrAns() {
                         setCompJoke('Từ này dùng rồi mà!');
                         setUsrInput('');
                         setCount(count - 1);
-        
-                        if (count === 1) {
-                            return <Lose />;
-                        }
                     } else {
                         setOutputLabel(output);
                     }
                 } else {
-                    return <Lose />;
+                    navigate("/win");
                 }
             })
             .catch((error) => {
@@ -152,22 +143,24 @@ function UsrAns() {
         setUsrInput('');
     
         return false;
-    };
+    }, [navigate, count, usrInput, outputLabel]);
   
+    if (count === 0) {
+        navigate('/lose');
+    }
+
     return (
         <div className={styles.container}>
             <Top count={count} />
-            <ComAns />
+            <ComAns outputLabel={outputLabel} />
             <div className={styles.centerScreen}>
-            <form onSubmit={handleRepeatvalue}>
-                <input
-                type="text"
-                id="Response"
-                className={styles.largeInput}
-                value={usrInput}
-                onChange={(e) => setUsrInput(e.target.value)}
-                />
-            </form>
+                <form onSubmit={handleRepeatvalue}>
+                    <input
+                        type="text"
+                        className={styles.largeInput}
+                        onChange={(e) => setUsrInput(e.target.value)}
+                    />
+                </form>
             </div>
             <Suggest compJoke={compJoke} />
         </div>
