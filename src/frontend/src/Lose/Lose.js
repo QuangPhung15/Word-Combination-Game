@@ -69,6 +69,8 @@ function Click() {
 
 export default function Lose() {
     return (
-        <Click />
+        <div className={styles.all}>
+            <Click />
+        </div>
     );
 }
