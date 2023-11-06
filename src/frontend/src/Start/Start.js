@@ -51,6 +51,8 @@ function Click() {
 
 export default function Start() {
     return (
-        <Click />
+        <div className={styles.all}>
+            <Click />
+        </div>
     );
 }

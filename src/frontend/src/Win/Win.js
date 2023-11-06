@@ -91,6 +91,8 @@ function Click() {
 
 export default function Win() {
     return (
-        <Click />
+        <div className={styles.all}>
+            <Click />
+        </div>
     );
 }

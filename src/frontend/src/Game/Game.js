@@ -150,19 +150,21 @@ function UsrAns() {
     }
 
     return (
-        <div className={styles.container}>
+        <div className={styles.all}>
+            <div className={styles.container}>
             <Top count={count} />
             <ComAns outputLabel={outputLabel} />
-            <div className={styles.centerScreen}>
-                <form onSubmit={handleRepeatvalue}>
-                    <input
-                        type="text"
-                        className={styles.largeInput}
-                        onChange={(e) => setUsrInput(e.target.value)}
-                    />
-                </form>
-            </div>
+                <div className={styles.centerScreen}>
+                    <form onSubmit={handleRepeatvalue}>
+                        <input
+                            type="text"
+                            className={styles.largeInput}
+                            onChange={(e) => setUsrInput(e.target.value)}
+                        />
+                    </form>
+                </div>
             <Suggest compJoke={compJoke} />
+            </div>
         </div>
     );
 }
