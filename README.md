@@ -6,13 +6,28 @@ We utilized Natural Language Processing by training a bigram language model on 2
 # How to Install and Run the Game
 After cloning the project, run these lines to run the game:
 
+<b>For MacOS:</b>
 ```
 pip install flask
 cd src/backend
-python3 transfer.py
+export FLASK_APP=transfer.py
+flask run
 ```
-Open a new terminal here.
+<i>Open a new terminal here.</i>
 ```
 cd src/frontend
 npm start
 ```
+<b>For Windows:</b>
+```
+pip install flask
+cd src\backend
+export FLASK_APP=transfer.py
+flask run
+```
+<i>Open a new terminal here.</i>
+```
+cd src\frontend
+npm start
+```
+To turn off the game, hit Ctrl + C on both 
